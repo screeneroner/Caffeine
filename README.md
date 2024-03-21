@@ -16,5 +16,5 @@ Double-clicking this icon temporarily turns off Caffeine, allowing your screensa
 
 ## Security Note
 
-Caffeine is straightforward and safe, as you can see from its source code. However, using it carelessly might leave your PC unlocked when it should be secure. Please use it responsibly and only when you truly need it. Remember to exit Caffeine once it's no longer needed.
+Caffeine is straightforward and safe, as you can see from its source code. However, using it carelessly might leave your PC unlocked when it should be secure. Please use it responsibly and only when you truly need it. Remember to exit Caffeine once it's no longer needed. To make Coffeine even more safe, it automatically disabling itself when you **lock your PC manually by pressing Win + L** or via the system power menu.
 
