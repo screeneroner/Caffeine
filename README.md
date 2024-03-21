@@ -14,5 +14,7 @@ Caffeine doesn't need to be installed. It's fully portable and doesn't save any 
 
 ## Usage
 
-Caffeine is a regular .exe application. Once you start it, a **new icon will appear in your system tray**. A **red checkmark indicates the tool is active** and keeping your PC awake. Double-clicking this icon temporarily turns off Caffeine, allowing your screensaver to function as usual. **When Caffeine is off, a red cross appears to show it's disabled**. To reactivate Caffeine, **either double-click the icon** again or select the **"Caffeine Enabled" option from the menu** that appears when you **right-click the application icon in the system tray**. This gives your PC a fresh dose of Caffeine.
+Caffeine is a regular .exe application. Once you start it, a **new icon will appear in your system tray**. A **red checkmark indicates the tool is active** and keeping your PC awake. When Caffeine is 'pressing' Left Shift (to emulate your presence) the checkmark in the system tray is shortly blinking indicating that it's working.
+
+Double-clicking this icon temporarily turns off Caffeine, allowing your screensaver to function as usual. **When Caffeine is off, a red cross appears to show it's disabled**. To reactivate Caffeine, **either double-click the icon** again or select the **"Caffeine Enabled" option from the menu** that appears when you **right-click the application icon in the system tray**. This gives your PC a fresh dose of Caffeine.
 
