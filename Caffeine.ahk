@@ -30,16 +30,24 @@ Menu, Tray, Add, Buy me a coffee, BuyCoffee
 Menu, Tray, Add, Exit, ScriptExit
 Menu, Tray, Default, Caffeine Enabled
 
-CaffeineEnabled := false
-
-ToggleCaffeineState() {
-    global CaffeineEnabled
-    CaffeineEnabled := !CaffeineEnabled
-    Menu, Tray, Tip, % "Caffeine " . (CaffeineEnabled ? "Enabled" : "Disabled")
-    Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
-    Menu, Tray, Icon, Caffeine Enabled, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
+; Every 10 seconds check if workstation was locked - disable Coffeine
+SetTimer, CheckIfLocked, 10000
+CheckIfLocked() {
+    global CaffeineEnabled    
+    if (CaffeineEnabled) {
+        if( !DllCall("User32\OpenInputDesktop","int",0*0,"int",0*0,"int",0x0001L*1) )             
+            ToggleCaffeineState()  
+    }
+    else 
+    {
+        Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, 110
+        sleep, 300
+        Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, 132
+    }
 }
 
+; Every 1 minute check if there is no user activity and Caffeine enabled - press LShift to emulate user activity
+SetTimer, CheckInactivity, 60000  
 CheckInactivity() {
     global CaffeineEnabled
     if (CaffeineEnabled && A_TimeIdle >= 50000)
@@ -51,6 +59,14 @@ CheckInactivity() {
     }
 }
 
+ToggleCaffeineState() {
+    global CaffeineEnabled
+    CaffeineEnabled := !CaffeineEnabled
+    Menu, Tray, Tip, % "Caffeine " . (CaffeineEnabled ? "Enabled" : "Disabled")
+    Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
+    Menu, Tray, Icon, Caffeine Enabled, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
+}
+
 ScriptExit() { 
     ExitApp
 }
@@ -59,6 +75,6 @@ BuyCoffee() {
     Run, https://www.buymeacoffee.com/screeneroner
 }
 
+CaffeineEnabled := false
 ToggleCaffeineState()
-SetTimer, CheckInactivity, 60000  
 
