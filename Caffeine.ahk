@@ -20,6 +20,9 @@
 ; Your honor and gratitude is greatly appreciated.
 ;----------------------------------------------------------------------------------------------------------------------
 
+; Changes History
+; 1.01 - added turning CheckIfLocked on when Caffeine Enabled and off if Caffeine Disabled 
+
 #SingleInstance force
 #Persistent
 
@@ -31,7 +34,6 @@ Menu, Tray, Add, Exit, ScriptExit
 Menu, Tray, Default, Caffeine Enabled
 
 ; Every 10 seconds check if workstation was locked - disable Coffeine
-SetTimer, CheckIfLocked, 10000
 CheckIfLocked() {
     global CaffeineEnabled    
     if (CaffeineEnabled) {
@@ -62,6 +64,10 @@ CheckInactivity() {
 ToggleCaffeineState() {
     global CaffeineEnabled
     CaffeineEnabled := !CaffeineEnabled
+    if (CaffeineEnabled)
+        SetTimer, CheckIfLocked, 10000 ; Restart the CheckIfLocked timer when caffeine is enabled
+    else 
+        SetTimer, CheckIfLocked, Off  ; Stop the CheckIfLocked timer
     Menu, Tray, Tip, % "Caffeine " . (CaffeineEnabled ? "Enabled" : "Disabled")
     Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
     Menu, Tray, Icon, Caffeine Enabled, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
