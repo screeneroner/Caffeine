@@ -22,6 +22,7 @@
 
 ; Changes History
 ; 1.01 - added turning CheckIfLocked on when Caffeine Enabled and off if Caffeine Disabled 
+; 1.02 - fixed/improved CheckIfLocked stability
 
 #SingleInstance force
 #Persistent
@@ -33,27 +34,28 @@ Menu, Tray, Add, Buy me a coffee, BuyCoffee
 Menu, Tray, Add, Exit, ScriptExit
 Menu, Tray, Default, Caffeine Enabled
 
-; Every 10 seconds check if workstation was locked - disable Coffeine
-CheckIfLocked() {
-    global CaffeineEnabled    
-    if (CaffeineEnabled) {
-        if( !DllCall("User32\OpenInputDesktop","int",0*0,"int",0*0,"int",0x0001L*1) )             
-            ToggleCaffeineState()  
-    }
-    else 
-    {
-        Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, 110
-        sleep, 300
-        Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, 132
-    }
+ScriptExit() {
+    ExitApp
 }
 
-; Every 1 minute check if there is no user activity and Caffeine enabled - press LShift to emulate user activity
-SetTimer, CheckInactivity, 60000  
+BuyCoffee() {
+    Run, https://www.buymeacoffee.com/screeneroner
+}
+
+; Every 10 seconds check if workstation was locked - disable Caffeine
+CheckIfLocked() {
+    global CaffeineEnabled
+    static lastState := false
+    newState := !DllCall("User32\OpenInputDesktop", "uint", 0, "int", false, "uint", GENERIC_READ)
+    if (newState && !lastState && CaffeineEnabled) {
+        ToggleCaffeineState()
+    }
+    lastState := newState
+}
+
 CheckInactivity() {
     global CaffeineEnabled
-    if (CaffeineEnabled && A_TimeIdle >= 50000)
-    {
+    if (CaffeineEnabled && A_TimeIdle >= 50000) {
         Send, {LShift down}{LShift up}
         Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, 50
         sleep, 700
@@ -66,21 +68,14 @@ ToggleCaffeineState() {
     CaffeineEnabled := !CaffeineEnabled
     if (CaffeineEnabled)
         SetTimer, CheckIfLocked, 10000 ; Restart the CheckIfLocked timer when caffeine is enabled
-    else 
+    else
         SetTimer, CheckIfLocked, Off  ; Stop the CheckIfLocked timer
     Menu, Tray, Tip, % "Caffeine " . (CaffeineEnabled ? "Enabled" : "Disabled")
     Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
     Menu, Tray, Icon, Caffeine Enabled, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
 }
 
-ScriptExit() { 
-    ExitApp
-}
-
-BuyCoffee() {
-    Run, https://www.buymeacoffee.com/screeneroner
-}
-
 CaffeineEnabled := false
 ToggleCaffeineState()
-
+SetTimer, CheckIfLocked, 10000
+SetTimer, CheckInactivity, 60000
