@@ -20,9 +20,11 @@
 ; Your honor and gratitude is greatly appreciated.
 ;----------------------------------------------------------------------------------------------------------------------
 
-; Changes History
+; Changes History (Don't forget to change version in Menu, Tray, Tip...)
 ; 1.01 - added turning CheckIfLocked on when Caffeine Enabled and off if Caffeine Disabled 
 ; 1.02 - fixed/improved CheckIfLocked stability
+; 1.03 - turn off both timers when screen is locked to prevent its awakening 
+
 
 #SingleInstance force
 #Persistent
@@ -66,11 +68,18 @@ CheckInactivity() {
 ToggleCaffeineState() {
     global CaffeineEnabled
     CaffeineEnabled := !CaffeineEnabled
-    if (CaffeineEnabled)
-        SetTimer, CheckIfLocked, 10000 ; Restart the CheckIfLocked timer when caffeine is enabled
-    else
-        SetTimer, CheckIfLocked, Off  ; Stop the CheckIfLocked timer
-    Menu, Tray, Tip, % "Caffeine " . (CaffeineEnabled ? "Enabled" : "Disabled")
+    ; Restart timers when caffeine is enabled and Stop timers when caffeine is disabled
+    if (CaffeineEnabled) 
+    {
+        SetTimer, CheckIfLocked, 10000 
+        SetTimer, CheckInactivity, 60000
+    }
+    else 
+    {
+        SetTimer, CheckIfLocked, Off  
+        SetTimer, CheckInactivity, Off
+    }
+    Menu, Tray, Tip, % "Caffeine v1.03 " . (CaffeineEnabled ? "Enabled" : "Disabled")
     Menu, Tray, Icon, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
     Menu, Tray, Icon, Caffeine Enabled, %SystemRoot%\System32\shell32.dll, % (CaffeineEnabled ? 145 : 132)
 }
