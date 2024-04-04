@@ -23,3 +23,4 @@ Caffeine is straightforward and safe, as you can see from its source code. Howev
 #### Changes History
 * 1.01 - added turning CheckIfLocked on when Caffeine Enabled and off if Caffeine Disabled
 * 1.02 - fixed/improved CheckIfLocked stability
+* 1.03 - turn off both timers when screen is locked to prevent its awakening
